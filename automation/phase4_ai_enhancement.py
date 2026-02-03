@@ -101,13 +101,13 @@ def derive_sector_allocation(holdings):
 def get_top_equity_funds(limit=500):
     """Get top equity funds by AUM"""
     
-    # Find equity funds, sorted by AUM
+    # Find equity funds, sorted by _id (indexed field) instead of aum to prevent MongoDB 32MB error
     pipeline = [
         {'$match': {
             'category': 'equity',
             'aum': {'$exists': True, '$ne': None}
         }},
-        {'$sort': {'aum': -1}},
+        {'$sort': {'_id': -1}},  # Use indexed field
         {'$limit': limit}
     ]
     
